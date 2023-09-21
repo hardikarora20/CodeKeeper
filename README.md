@@ -140,9 +140,9 @@ We welcome contributions to improve and expand CodeKeeper. Whether you're a deve
 
 We encourage open and constructive collaboration to make CodeKeeper even better.
 
-<p align="center">
+<p>
   <br>
-  <img alt="CodeKeeper Logo" title="CodeKeeper" src="your-project-logo.png" width="200"><br>
+  <b>CodeKeeper</b><br>
   Your Secure Password Manager.
   <br><br>
 </p>
