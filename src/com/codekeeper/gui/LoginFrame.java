@@ -1,14 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+passwordp and userp
  */
 package com.codekeeper.gui;
 
-import static com.codekeeper.utility.PasswordEncryption.decryptPassword;
-import static com.codekeeper.utility.PasswordEncryption.encryptPassword;
+import com.codekeeper.dao.UserDao;
+import com.codekeeper.pojo.User;
+import com.codekeeper.pojo.UserPojo;
+import com.codekeeper.pojo.UserProfile;
+import com.codekeeper.utility.PasswordEncryption;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import java.awt.Color;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -20,6 +22,7 @@ public class LoginFrame extends javax.swing.JFrame {
     /**
      * Creates new form LoginFrame
      */
+    private String mail, password;
     public LoginFrame() {
         UIManager.put( "TextComponent.arc", 15 );
         UIManager.put( "Button.arc", 25 );
@@ -43,16 +46,18 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtMail = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         jButton2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(45, 45, 45));
         jPanel1.setPreferredSize(new java.awt.Dimension(1280, 720));
@@ -76,15 +81,23 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1));
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 240, 190, 30));
 
-        jTextField1.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
-        jTextField1.setToolTipText("Enter your email");
-        jTextField1.setMargin(new java.awt.Insets(2, 10, 2, 10));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtMail.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
+        txtMail.setText("hardik@mail.com");
+        txtMail.setToolTipText("Enter your email");
+        txtMail.setMargin(new java.awt.Insets(2, 10, 2, 10));
+        txtMail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtMailActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, 410, 70));
+        jPanel1.add(txtMail, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 270, 410, 70));
+
+        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        txtPassword.setText("1234");
+        txtPassword.setMargin(new java.awt.Insets(2, 10, 2, 10));
+        txtPassword.setMinimumSize(new java.awt.Dimension(22, 34));
+        txtPassword.setPreferredSize(new java.awt.Dimension(22, 34));
+        jPanel1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 410, 70));
 
         jButton2.setBackground(new java.awt.Color(71, 140, 248));
         jButton2.setFont(new java.awt.Font("Poppins Medium", 0, 20)); // NOI18N
@@ -103,11 +116,6 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel4.setText("Password");
         jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 4, 1, 1));
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 350, 190, 30));
-
-        jTextField2.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
-        jTextField2.setToolTipText("Enter your email");
-        jTextField2.setMargin(new java.awt.Insets(2, 10, 2, 10));
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 380, 410, 70));
 
         jLabel5.setFont(new java.awt.Font("Poppins", 0, 15)); // NOI18N
         jLabel5.setText("Not registered yet? ");
@@ -153,21 +161,46 @@ public class LoginFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtMailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtMailActionPerformed
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String password = "hardik12";
-        String p1 = (encryptPassword(1, password));
-        String p2 = (encryptPassword(2, password));
-        String p3 = (encryptPassword(3, password));
-        System.out.println(p1+"  "+p2+"  "+p3);
-//        System.out.println(decryptPassword(1, p1)+"  "+decryptPassword(2, p2)+"  "+decryptPassword(3, p3));
+        boolean isInputValid=validateInputs();
+        if(isInputValid==false){
+            JOptionPane.showMessageDialog(null,"Please input id and password");
+            return;
+        }
+        try{
+            User user=new User();
+            user.setMail(mail);
+            String pwd = new String(PasswordEncryption.getEncryptedUserPassword(password));
+            user.setPassword(pwd);
+            UserPojo userpojo;
+            userpojo = UserDao.validateUser(user);
+            String userName = userpojo.getName();
+            if(userName!=null){
+                JOptionPane.showMessageDialog(null,"Welcome "+userName+"!","Login success!",JOptionPane.INFORMATION_MESSAGE);
+                UserProfile.setUserName(userName);
+                UserProfile.setType(userpojo.getType());
+                UserProfile.setUserImg(userpojo.getUserImg());
+                UserProfile.setMail(userpojo.getEmail());
+                UserProfile.setUserId(userpojo.getUser_id());
+                new HomeScreen().setVisible(true);
+                this.dispose();
+                return;
+                
+            }
+            JOptionPane.showMessageDialog(null,"Invalid credentials!","Login denied!",JOptionPane.ERROR_MESSAGE);
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(null,"Error In DB"+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
@@ -216,7 +249,16 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField txtMail;
+    private javax.swing.JPasswordField txtPassword;
     // End of variables declaration//GEN-END:variables
+
+    private boolean validateInputs() {
+        mail=txtMail.getText().trim();
+        char []pwd=txtPassword.getPassword();
+        if(mail.isEmpty()|| pwd.length==0)
+            return false;
+        password=new String(pwd);
+        return true;
+    }
 }

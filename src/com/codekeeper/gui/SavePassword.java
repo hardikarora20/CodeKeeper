@@ -5,9 +5,14 @@
  */
 package com.codekeeper.gui;
 
+import com.codekeeper.dao.PasswordDao;
 import com.codekeeper.pojo.PasswordPojo;
+import com.codekeeper.pojo.UserProfile;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -215,17 +220,35 @@ public class SavePassword extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGeneratePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratePassActionPerformed
-       if(!check()){
+        System.out.println(UserProfile.getMail());
+        if(!check()){
            JOptionPane.showMessageDialog(null, "Please fill all information!", "Error", JOptionPane.ERROR_MESSAGE);
            return;
        }
        PasswordPojo pp = new PasswordPojo();
-       pp.setUserEmail(user.email);
+       pp.setUserEmail(UserProfile.getMail());
        pp.setWebsite(txtName.getText());
        pp.setUsername(txtMail.getText());
        pp.setPassword(txtPass.getText());
-       pp.setCategory(jcCategory.getSelectedItem().toString());
-       System.out.println(jcCategory.getSelectedItem().toString());
+       pp.setCategory(jcCategory.getSelectedItem().toString().trim());
+       String rating = lblPassPerc.getText().toString().trim();
+       pp.setRating(Integer.parseInt(rating.substring(0, rating.length() - 1)));
+       System.out.println(pp);
+       
+        try {
+            boolean result=PasswordDao.savePassword(pp);
+            if(result){
+                JOptionPane.showMessageDialog(null, "Password saved successfully!");
+                new HomeScreen().setVisible(true);
+                this.dispose();
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Could not save password! Try Again");    
+        }
+        catch(SQLException ex){
+            JOptionPane.showMessageDialog(null,"Error In DB"+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnGeneratePassActionPerformed
 
     private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed

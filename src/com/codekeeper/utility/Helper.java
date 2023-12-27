@@ -85,13 +85,13 @@ public class Helper {
     public static String getSuggestions(){
         String suggestion[]={
                         "Got ideas to improve us? Share 'em here!",
-                        "Got a question? We've got your back! Hit us up", 
                         "Got an idea to make us even cooler? Let us know!",
                         "Need help? Ask us anything!",
                         "Got a suggestion? Let us know!",
                         "Have a query? We're here to assist!",
                         "Confused? We'll clear things up!",
-                        "Got feedback? Share it with us!"};
+                        "Got feedback? Share it with us!",
+                        "Got a question? We've got your back! Hit us up 👋"};
         return "<html><body>"+suggestion[new Random().nextInt(suggestion.length)]+"</html></body>";
     }
 }

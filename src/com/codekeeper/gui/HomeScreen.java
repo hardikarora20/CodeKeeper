@@ -8,6 +8,7 @@ package com.codekeeper.gui;
 
 import static com.codekeeper.utility.Helper.*;
 import com.codekeeper.pojo.UserPojo;
+import com.codekeeper.pojo.UserProfile;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.ui.FlatLineBorder;
 import java.awt.Color;
@@ -22,7 +23,6 @@ import javax.swing.UIManager;
 public class HomeScreen extends javax.swing.JFrame {
 
     /** Creates new form homeScreen */
-    UserPojo user;
     public HomeScreen() {
         UIManager.put( "TextComponent.arc", 10 );
         UIManager.put( "Button.arc", 30 );
@@ -31,7 +31,6 @@ public class HomeScreen extends javax.swing.JFrame {
         UIManager.put( "ProgressBar.arc", 10 );
         FlatMacDarkLaf.setup();
         initComponents();
-        user = new UserPojo(1,"Harshit","himani21@gmail.com",2,5);
         helper();
     }
 
@@ -83,6 +82,11 @@ public class HomeScreen extends javax.swing.JFrame {
 
         btnView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/codekeeper/icons/view.png"))); // NOI18N
         btnView.setText("jLabel1");
+        btnView.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnViewMouseClicked(evt);
+            }
+        });
         jPanel1.add(btnView, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 290, 350, -1));
 
         txtGreet.setFont(new java.awt.Font("Poppins", 1, 50)); // NOI18N
@@ -121,7 +125,7 @@ public class HomeScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddMouseClicked
 
     private void imgUsrMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imgUsrMouseClicked
-        new Dashboard(user).setVisible(true);
+        new Dashboard().setVisible(true);
         dispose();
     }//GEN-LAST:event_imgUsrMouseClicked
 
@@ -129,6 +133,11 @@ public class HomeScreen extends javax.swing.JFrame {
         new GeneratePassword().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnGenMouseClicked
+
+    private void btnViewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnViewMouseClicked
+        new ManagePassword().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnViewMouseClicked
 
     /**
      * @param args the command line arguments
@@ -178,8 +187,8 @@ public class HomeScreen extends javax.swing.JFrame {
 
     private void helper() {
         txtHelp.setText(getTip());
-        txtGreet.setText(getGreeting(user.getName()));
-        imgUsr.setIcon(new javax.swing.ImageIcon(getClass().getResource(imageUrl(user.getUserImg()))));
+        txtGreet.setText(getGreeting(UserProfile.getUserName()));
+        imgUsr.setIcon(new javax.swing.ImageIcon(getClass().getResource(imageUrl(UserProfile.getUserImg()))));
     }
 
 }
