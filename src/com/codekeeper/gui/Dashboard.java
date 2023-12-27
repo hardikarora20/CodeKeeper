@@ -6,9 +6,15 @@
 
 package com.codekeeper.gui;
 
+import com.codekeeper.dao.PasswordDao;
 import static com.codekeeper.utility.Helper.*;
 import com.codekeeper.pojo.UserPojo;
+import com.codekeeper.pojo.UserProfile;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -16,9 +22,7 @@ import javax.swing.UIManager;
  * @author hardi
  */
 public class Dashboard extends javax.swing.JFrame {
-
-    /** Creates new form homeScreen */
-    UserPojo user;
+    int compromised, weak, safe, percentage, total;
     public Dashboard() {
         UIManager.put( "TextComponent.arc", 10 );
         UIManager.put( "Button.arc", 40 );
@@ -26,11 +30,8 @@ public class Dashboard extends javax.swing.JFrame {
         UIManager.put( "CheckBox.arc", 10 );
         UIManager.put( "ProgressBar.arc", 25 );
         FlatMacDarkLaf.setup();
+        compromised = weak = safe = percentage = total = 0;
         initComponents();
-    }
-    public Dashboard(UserPojo user){
-        this();
-        this.user = user;
         helper();
     }
 
@@ -108,6 +109,11 @@ public class Dashboard extends javax.swing.JFrame {
         btnLogout.setToolTipText("Logout?");
         btnLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLogout.setFocusable(false);
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
         jPanel1.add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 220, 290, 90));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -153,7 +159,7 @@ public class Dashboard extends javax.swing.JFrame {
         txtNoOfWeak.setFont(new java.awt.Font("Poppins", 1, 48)); // NOI18N
         txtNoOfWeak.setForeground(new java.awt.Color(28, 69, 54));
         txtNoOfWeak.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtNoOfWeak.setText("79");
+        txtNoOfWeak.setText("21");
         jPanel1.add(txtNoOfWeak, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 580, 180, 60));
 
         btnWeakBack.setBackground(new java.awt.Color(198, 226, 214));
@@ -200,7 +206,7 @@ public class Dashboard extends javax.swing.JFrame {
         txtNoOfComp.setFont(new java.awt.Font("Poppins", 1, 48)); // NOI18N
         txtNoOfComp.setForeground(new java.awt.Color(28, 69, 54));
         txtNoOfComp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtNoOfComp.setText("37");
+        txtNoOfComp.setText("9");
         jPanel1.add(txtNoOfComp, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 580, 180, 60));
 
         btnCompBack.setBackground(new java.awt.Color(198, 226, 214));
@@ -217,7 +223,7 @@ public class Dashboard extends javax.swing.JFrame {
         txtNoOfSaved.setFont(new java.awt.Font("Poppins", 1, 48)); // NOI18N
         txtNoOfSaved.setForeground(new java.awt.Color(28, 69, 54));
         txtNoOfSaved.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtNoOfSaved.setText("12");
+        txtNoOfSaved.setText("73");
         jPanel1.add(txtNoOfSaved, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, 180, 60));
 
         btnTotalBack.setBackground(new java.awt.Color(198, 226, 214));
@@ -238,7 +244,7 @@ public class Dashboard extends javax.swing.JFrame {
 
         txtStrong.setFont(new java.awt.Font("Poppins Black", 0, 64)); // NOI18N
         txtStrong.setForeground(new java.awt.Color(198, 226, 214));
-        txtStrong.setText("70%");
+        txtStrong.setText("59%");
         jPanel1.add(txtStrong, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 310, 100));
 
         percentageStrong.setBackground(new java.awt.Color(0, 0, 0));
@@ -288,6 +294,12 @@ public class Dashboard extends javax.swing.JFrame {
         new GeneratePassword().setVisible(true);
         dispose();
     }//GEN-LAST:event_btnBack1ActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        JOptionPane.showMessageDialog(null,"Thank you "+UserProfile.getUserName()+"! \nRedirecting to Login screen.");
+        new LoginFrame().setVisible(true);
+        this.dispose();   
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -363,9 +375,25 @@ public class Dashboard extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     private void helper() {
-        txtUser.setText(user.getName());
-        imgUsr.setIcon(new javax.swing.ImageIcon(getClass().getResource(imageUrl(user.getUserImg()))));
-        txtUserMail.setText(user.getEmail());
+        txtUser.setText(UserProfile.getUserName());
+        imgUsr.setIcon(new javax.swing.ImageIcon(getClass().getResource(imageUrl(UserProfile.getUserImg()))));
+        txtUserMail.setText(UserProfile.getMail());
         btnHelp.setText(getSuggestions());
+        try {
+            int values[] = PasswordDao.updatePasswordStatistics();
+            compromised = values[0];
+            weak = values[1];
+            safe = values[2];
+            percentage = values[3];
+            total = values[4];
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Error");
+            ex.printStackTrace();
+        }
+        txtNoOfSaved.setText(String.valueOf(total));
+        txtNoOfSafe.setText(String.valueOf(safe));
+        txtNoOfWeak.setText(String.valueOf(weak));
+        txtNoOfComp.setText(String.valueOf(compromised));
+        txtStrong.setText(percentage+"%");
     }
 }

@@ -11,6 +11,19 @@ package com.codekeeper.pojo;
  */
 public class PasswordPojo {
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    @Override
+    public String toString() {
+        return "PasswordPojo{" + "userEmail=" + userEmail + ", website=" + website + ", username=" + username + ", password=" + password + ", logo=" + logo + ", category=" + category + '}';
+    }
+
     public String getUserEmail() {
         return userEmail;
     }
@@ -78,5 +91,6 @@ public class PasswordPojo {
     private String password;
     private String logo;
     private String category;
+    private int rating;
     
 }
